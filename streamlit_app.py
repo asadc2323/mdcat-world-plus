@@ -1,171 +1,122 @@
 import streamlit as st
-from datetime import datetime
+import streamlit.components.v1 as components
+from datetime import datetime, timedelta
 
-# --- Streamlit Config ---
-st.set_page_config(
-    page_title="Mentr: MDCAT World Plus",
-    page_icon="🚀",
-    layout="wide"
-)
-
-# --- Theme CSS Overrides ---
+# --- Page Configuration & Theming ---
+st.set_page_config(page_title="Mentr Landing", layout="wide")
 st.markdown(
-    """
-    <style>
-    .reportview-container, .css-1d391kg {background-color: #03162A;}
-    .stButton>button {background-color: #2DD0BE; color: #03162A; border-radius: 0.5rem;}
-    .stButton>button:hover {background-color: #24a89e;}
-    .stMetricValue, .stMetricDelta {color: #FFFFFF;}
-    .stDownloadButton>button {background-color: #2DD0BE; color: #03162A; border-radius: 0.5rem; margin-top: 1rem;}
-    .stDownloadButton>button:hover {background-color: #24a89e;}
-    </style>
-    """,
+    """<style>
+    :root {
+        --primary-color: #2DD0BE;
+        --bg-color: #03162A;
+        --card-bg: rgba(45, 208, 190, 0.1);
+    }
+    body, .stApp {
+        background-color: var(--bg-color);
+        color: white;
+        font-family: 'Inter', sans-serif;
+    }
+    .metric-container {
+        background: var(--card-bg);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+    }
+    .section-header {
+        font-size: 2.2rem;
+        margin: 2rem 0 1rem;
+        color: var(--primary-color);
+        text-align: center;
+    }
+    /* Flip-card styles */
+    .flip-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; }
+    .flip-card { background: transparent; width: 220px; height: 260px; perspective: 1000px; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
+    .flip-card-front { background-color: var(--primary-color); color: var(--bg-color); }
+    .flip-card-back { background-color: var(--bg-color); color: white; transform: rotateY(180deg); border: 2px solid var(--primary-color); }
+    .flip-card-front h4, .flip-card-back p { margin: 0.5rem 0; }
+    </style>""",
     unsafe_allow_html=True
 )
 
 # --- Hero Section ---
-with st.container():
-    col1, col2 = st.columns((6,4))
-    with col1:
-        st.title("Welcome to MDCAT World (Plus)")
-        st.write("Your all-in-one pathway from Freshers Session to MDCAT success.")
-        st.metric(label="Students Joined Today", value="125+", delta="+20%")
-        if st.button("Get Started"):
-            st.balloons()
-    with col2:
-        st.image(
-            "https://via.placeholder.com/400x300.png?text=Mentr+MDCAT+World+Hero",
-            use_container_width=True
-        )
-
+st.title("Welcome to Mentr")
+st.subheader("Re-building Education: From Freshers to MDCAT Success")
+st.write("Join 1,000+ students who have skyrocketed their scores with our immersive, mentorship-driven platform.")
 st.markdown("---")
 
-# --- Introduction Video ---
-st.header("Why Choose Mentr?")
-st.write("Watch this quick overview to see how we transform your MDCAT preparation:")
-st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")  # Replace with your actual promo video
-
-# --- Free Guide Download ---
-st.subheader("Get Your Free MDCAT Study Guide")
-guide_text = """
-MDCAT Mastery Guide\n\n
-• Proven strategies for high scores\n
-• Time management tips\n
-• Common pitfalls & how to avoid them\n"""
-st.download_button(
-    label="Download Free Guide",
-    data=guide_text,
-    file_name="MDCAT_Study_Guide.txt",
-    mime="text/plain"
-)
-
+# --- Real-Time Metrics ---
+st.markdown("### Key Performance Metrics", unsafe_allow_html=True)
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("Avg. Score Increase", "30%", delta="+30%")
+with col2:
+    st.metric("Doubts Resolved / Day", "1,200")
+with col3:
+    st.metric("Completion Rate", "85%", delta="+5%")
 st.markdown("---")
 
-# --- Features Section ---
-st.header("Our Core Features")
-features = [
-    ("📚 Academic Support", [
-        "Complete syllabus A–Z",
-        "Intensive revision & crash-tests",
-        "Concise written & video lessons",
-        "7-day zero-stress roadmap"
-    ]),
-    ("👥 Mentorship", [
-        "24/7 doubt support",
-        "One-on-one progress calls",
-        "Daily accountability nudges"
-    ]),
-    ("🏆 Post-MDCAT Support", [
-        "MBBS admission roadmap",
-        "Celebrate success ceremonies",
-        "Exclusive MBBS pro network"
-    ])
-]
-cols = st.columns(3)
-for idx, (title, items) in enumerate(features):
-    with cols[idx]:
-        st.subheader(title)
-        for item in items:
-            st.write(f"- {item}")
-        st.progress((idx+1)/len(features))
+# --- Feature Flip-Card Showcase ---
+st.markdown("### Our Core Features", unsafe_allow_html=True)
 
+flip_card_html = r'''
+<div class="flip-container">
+  <div class="flip-card">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <h4>Academic Support</h4>
+        <p>Complete syllabus mastery</p>
+      </div>
+      <div class="flip-card-back">
+        <p>Before: 50% avg. scores</p>
+        <p>After: 80% avg. scores</p>
+        <p>⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+  <div class="flip-card">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <h4>Mentorship</h4>
+        <p>24/7 doubt-solving</p>
+      </div>
+      <div class="flip-card-back">
+        <p>Before: 2 doubts/day</p>
+        <p>After: 20 solved/day</p>
+        <p>⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+  <div class="flip-card">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <h4>Post-MDCAT Support</h4>
+        <p>Admissions roadmap</p>
+      </div>
+      <div class="flip-card-back">
+        <p>Before: 10% admission rate</p>
+        <p>After: 70% admission rate</p>
+        <p>⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+'''
+components.html(flip_card_html, height=340)
+
+# --- Registration CTA Form ---
 st.markdown("---")
-
-# --- Interactive Testimonials ---
-st.header("What Our Students Say")
-testimonials = [
-    ("Jumped from 60% → 85% in 8 weeks!", "— Ayesha Z."),
-    ("Accountability nudges changed my routine.", "— Hamza R."),
-    ("Secured my dream MBBS seat!", "— Ali S.")
-]
-with st.expander("See all testimonials", expanded=False):
-    for quote, author in testimonials:
-        st.info(f"“{quote}”  \n{author}")
-
-st.markdown("---")
-
-# --- Live Countdown Section ---
-st.header("Next Live Q&A")
-countdown_placeholder = st.empty()
-def update_countdown():
-    end = datetime(2025, 6, 1, 20, 0)
-    now = datetime.now()
-    diff = end - now
-    if diff.total_seconds() <= 0:
-        countdown_placeholder.success("🔴 Live Q&A is now! 🔴")
-    else:
-        days = diff.days
-        hours, rem = divmod(diff.seconds, 3600)
-        minutes, _ = divmod(rem, 60)
-        countdown_placeholder.write(f"Next Live Q&A in: **{days}d {hours}h {minutes}m**")
-update_countdown()
-
-st.markdown("---")
-
-# --- FAQs Expanders ---
-st.header("Frequently Asked Questions")
-faqs = [
-    ("How do I join the Freshers Session?", "Simply click 'Get Started', fill out the form, and we’ll reach out to you via email and phone."),
-    ("What’s included in the mentorship?", "Daily check-ins, one-on-one calls, and 24/7 doubt support until the exam day. "),
-    ("Is there a money-back guarantee?", "Yes! If you don't see improvement in 30 days, we'll refund your fee—no questions asked.")
-]
-for q, a in faqs:
-    with st.expander(q):
-        st.write(a)
-
-st.markdown("---")
-
-# --- Team Showcase ---
-st.header("Meet Our Mentors")
-names = ["Dr. Sara Zaka", "Mr. Hamza Ali", "Ms. Ayesha Khan"]
-roles = ["Batch Head, English", "Senior Mentor, Biology", "Lead Mentor, Chemistry"]
-cols = st.columns(3)
-for idx, (n, r) in enumerate(zip(names, roles)):
-    with cols[idx]:
-        st.image("https://via.placeholder.com/150", caption=f"{n}\n{r}")
-        st.write(r)
-
-st.markdown("---")
-
-# --- Contact & Chat CTA ---
-st.write("**Need help?**  ")
-st.markdown("[Chat with us on WhatsApp](https://wa.me/1234567890?text=Hi%20Mentr%2C%20I%20need%20assistance)")
-
-st.markdown("---")
-
-# --- Registration Form Section ---
-st.header("Register Now")
-with st.form(key="register_form"):
-    name = st.text_input("Full Name")
+st.markdown("### Ready to transform your MDCAT journey?", unsafe_allow_html=True)
+with st.form("register_form"):
+    name  = st.text_input("Full Name")
     email = st.text_input("Email Address")
-    phone = st.text_input("Phone Number")
-    referral = st.text_input("Referral Code (if any)")
-    submitted = st.form_submit_button("Register Now")
-    if submitted:
-        st.success(f"Thanks {name}! We have received your registration.")
+    submit = st.form_submit_button("Join Mentr World")
+    if submit:
+        st.success("You're registered! 🎉")
         st.balloons()
 
+# --- Footer / Contact ---
 st.markdown("---")
-
-# --- Footer ---
-st.write("© 2025 Mentr. All rights reserved.")
+st.write("Have questions? [Chat with us on WhatsApp](https://wa.me/1234567890)")
