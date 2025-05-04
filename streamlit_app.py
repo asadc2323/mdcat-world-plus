@@ -58,11 +58,13 @@ with col1:
     st.markdown("<div class='pillar'>", unsafe_allow_html=True)
     st.image("https://img.icons8.com/ios-filled/50/2DD0BE/book.png", width=40)
     st.markdown("### Academic Support")
-    st.write(
-        "- Complete syllabus from A–Z  
-         - Intensive revision & crash-test sessions  
-         - Concise written & video discussions  
-         - 7-day “zero-stress” final plan"
+    st.markdown(
+        """
+- Complete syllabus from A–Z  
+- Intensive revision & crash-test sessions  
+- Concise written & video discussions  
+- 7-day “zero-stress” final plan
+        """
     )
     with st.expander("More details"):
         st.write("Our subject-matter experts guide you step-by-step, ensuring mastery and confidence before the big day.")
@@ -72,10 +74,12 @@ with col2:
     st.markdown("<div class='pillar'>", unsafe_allow_html=True)
     st.image("https://img.icons8.com/ios-glyphs/50/2DD0BE/user-group-man-woman.png", width=40)
     st.markdown("### Mentorship")
-    st.write(
-        "- 24/7 doubt-solving until exam day  
-         - One-on-one progress check-ins  
-         - Daily accountability reminders"
+    st.markdown(
+        """
+- 24/7 doubt-solving until exam day  
+- One-on-one progress check-ins  
+- Daily accountability reminders
+        """
     )
     with st.expander("More details"):
         st.write("Personalized mentorship plans and data-driven feedback keep you on track every day.")
@@ -85,10 +89,12 @@ with col3:
     st.markdown("<div class='pillar'>", unsafe_allow_html=True)
     st.image("https://img.icons8.com/ios-filled/50/2DD0BE/medal.png", width=40)
     st.markdown("### Post-MDCAT Support")
-    st.write(
-        "- MBBS admission roadmap & guidance  
-         - Celebrate success at our prize ceremony  
-         - Exclusive access to MBBS professional network"
+    st.markdown(
+        """
+- MBBS admission roadmap & guidance  
+- Celebrate success at our prize ceremony  
+- Exclusive access to MBBS professional network
+        """
     )
     with st.expander("More details"):
         st.write("Stay connected with mentors and peers as you transition into medical school and beyond.")
@@ -100,7 +106,7 @@ st.markdown(
     <div class="ticker">
       <div class="ticker-item">⭐⭐⭐⭐⭐ “Jumped from 60% to 85% in 8 weeks!” — Ayesha Z.</div>
       <div class="ticker-item">⭐⭐⭐⭐⭐ “Accountability check-ins saved my study routine.” — Hamza R.</div>
-      <div class="ticker-item">⭐⭐⭐⭐⭐ “Landed my dream MBBS seat!” — Ali S.</div>
+      <div class="ticker-item">⭐⭐⭐⭐⭐ “Landed my dream MBBS seat!” — Ali S.</div>
     </div>
     """,
     unsafe_allow_html=True
