@@ -1,17 +1,9 @@
 # To run this prototype:
-# pip install streamlit streamlit_lottie
+# pip install streamlit
 
 import streamlit as st
-import requests
-from streamlit_lottie import st_lottie
 from datetime import datetime
-
-# --- Helper to load Lottie animations ---
-def load_lottie_url(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
+import streamlit.components.v1 as components
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -69,20 +61,28 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Hero Section with Lottie ---
-lottie_anim = load_lottie_url("https://assets1.lottiefiles.com/packages/lf20_tfb3estd.json")
+# --- Hero Section with Lottie Embed ---
+st.markdown("<script src='https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js'></script>", unsafe_allow_html=True)
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
 col1, col2 = st.columns([6,4], gap="large")
 with col1:
     st.markdown("<div class='hero-text'>", unsafe_allow_html=True)
-    st.markdown("""
-    <h1>Welcome to the <span class='highlight'>MDCAT World (Plus)</span></h1>
-    <p>Your all-in-one path—from Freshers Session right <br/>up to MDCAT success.</p>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <h1>Welcome to the <span class='highlight'>MDCAT World (Plus)</span></h1>
+        <p>Your all-in-one path—from Freshers Session right <br/>up to MDCAT success.</p>
+        """,
+        unsafe_allow_html=True
+    )
     st.markdown("</div>", unsafe_allow_html=True)
 with col2:
-    if lottie_anim:
-        st_lottie(lottie_anim, height=250, key="hero_lottie")
+    # Embed Lottie animation
+    components.html(
+        """
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_tfb3estd.json"  background="transparent"  speed="1"  style="width:100%; height:250px;"  loop  autoplay></lottie-player>
+        """,
+        height=300,
+    )
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Core Pillars ---
@@ -121,8 +121,6 @@ st.markdown(
 # --- Live Countdown ---
 target = datetime(2025,6,1,20,0)
 now = datetime.now()
-days,hms = now - now, None  # placeholder to avoid lint
-# recalc
 delta = target - now
 
 days = delta.days
@@ -134,14 +132,12 @@ st.markdown(
     <div class='countdown'>
       Next Live Q&A in: {days:02d}d : {hours:02d}h : {minutes:02d}m
     </div>
-    """, unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True
 )
 
 # --- CTAs ---
-st.markdown(
-    "<div style='text-align:center; margin-bottom:4rem;'>",
-    unsafe_allow_html=True
-)
+st.markdown("<div style='text-align:center; margin-bottom:4rem;'>", unsafe_allow_html=True)
 st.markdown("<a href='#join' class='btn-primary'>Join Mentr World →</a><a href='#reviews' class='btn-secondary'>Read Reviews →</a>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
