@@ -5,148 +5,151 @@ import random, time
 
 # ── Page Config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Mentr • MDCAT World",
+    page_title="Mentr • Top G MDCAT World",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ── Brand & Layout CSS ─────────────────────────────────────────────────────────
+# ── Global CSS (Black & Gold) ─────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
 html, body, [class*="css"] {
-  font-family: 'Inter', sans-serif !important;
-  background: #03162A;
-  color: #FFF;
-  margin:0; padding:0;
+  font-family: 'Oswald', sans-serif !important;
+  background: #000; color: #fff; margin:0; padding:0;
 }
-/* Hero */
-.hero { text-align:center; padding:3rem 1rem; }
-.hero h1 { color:#2DD0BE; font-size:3rem; margin-bottom:.3rem; }
-.hero p  { color:#B0C4DE; font-size:1.2rem; }
-/* Toast */
+h1, h2, h3 { margin: .5rem 0; }
+h1 { color: #FFD700; font-size: 3rem; text-align: center; }
+h2 { color: #CCC; font-size: 1.5rem; text-align: center; }
+.topg-btn button {
+  background: #FFD700; color: #000; font-weight:700;
+  padding: .75rem 1.5rem; border:none; border-radius:.3rem;
+  transition: transform .2s ease;
+}
+.topg-btn button:hover { transform: scale(1.05); }
+.card {
+  background: rgba(255,255,255,0.05); border: 2px solid #FFD700;
+  border-radius: .5rem; padding: 1.5rem; margin:1rem 0;
+}
+.challenge .stRadio > div > label { color: #FFD700; }
+.countdown { text-align:center; color:#FFD700; margin:2rem 0; font-size:1.2rem;}
 .toast {
   position: fixed; bottom:1rem; left:50%; transform:translateX(-50%);
-  background: rgba(0,0,0,0.75); color:#FFF; padding:.75rem 1.5rem;
-  border-radius:1rem; opacity:0; transition:opacity .5s ease-in-out;
-  z-index:9999;
+  background: rgba(255,215,0,0.9); color:#000; padding:.75rem 1rem;
+  border-radius:1rem; opacity:0; transition: opacity .5s;
+  font-weight:700; z-index:9999;
 }
 .toast.show { opacity:1; }
-/* Spin section */
-.spin-btn > button { background:#2DD0BE; color:#03162A; font-weight:600; padding:.75rem 1.5rem; border-radius:.5rem; border:none; }
-.spin-btn > button:hover { opacity:.9; }
-/* Feature selector */
-.stSelectbox > div>div { background: rgba(45,208,190,0.1); border-radius:0.5rem; }
-/* Progress bars */
-.stProgress > div > div { background: #2DD0BE !important; }
-/* Countdown */
-.countdown { text-align:center; color:#2DD0BE; margin:2rem 0; font-size:1.5rem; }
-/* CTA buttons */
-.cta-btn button { background:#2DD0BE; color:#03162A; font-weight:600; padding:.75rem 1.5rem; border-radius:.5rem; border:none; }
-.cta-btn button:hover { opacity:.9; }
-/* Sidebar */
-.stSidebar { background:#021022; padding:1rem; }
+.stSidebar { background:#111; padding:1rem; }
+.sidebar-content a { color:#FFD700; text-decoration:none; font-weight:700; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── 1. Hero ─────────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="hero">
-  <h1>Welcome to Mentr’s MDCAT World</h1>
-  <p>Re-building Education: Personalized, Holistic, Boundless. Increase Your Every Quotient!</p>
+# ── Typewriter Hero ───────────────────────────────────────────────────────────────
+components.html("""
+<div style="text-align:center; margin:2rem 0;">
+  <h1 id="typewriter"></h1>
 </div>
-""", unsafe_allow_html=True)
+<script>
+  const txt = "ARE YOU A TOP G?";
+  let i=0;
+  function type() {
+    if(i<txt.length){
+      document.getElementById("typewriter").innerHTML += txt.charAt(i++);
+      setTimeout(type, 100);
+    }
+  }
+  type();
+</script>
+""", height=120)
 
-# ── 2. Live Social Proof Toasts ─────────────────────────────────────────────────
+st.markdown("<h2>Stop Whining. Start Winning. This Is High-Stakes MDCAT Prep for the Elite.</h2>", unsafe_allow_html=True)
+
+# ── Live Toasts (Social Proof) ──────────────────────────────────────────────────
 components.html("""
 <div id="toast" class="toast"></div>
 <script>
-  const messages = [
-    "Ali from Lahore just joined!",
-    "Sara from Karachi reserved her seat!",
-    "Hamza from Islamabad is on board!",
-    "Usman from Peshawar locked in MDCAT World!"
-  ];
-  function showToast() {
-    const msg = messages[Math.floor(Math.random()*messages.length)];
-    const el = document.getElementById("toast");
-    el.innerText = msg; el.classList.add("show");
-    setTimeout(()=>el.classList.remove("show"), 3000);
+  const msgs = ["🔥 Ali from Lahore just joined!", "🚀 Sara from Karachi locked her seat!", "💎 Hamza from Islamabad is in the Top G circle!"];
+  function showToast(){
+    const el=document.getElementById("toast");
+    el.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    el.classList.add("show");
+    setTimeout(()=>el.classList.remove("show"),3000);
   }
-  setInterval(showToast, 6000);
+  setInterval(showToast, 5000);
 </script>
 """, height=0)
 
-# ── 3. Gamified Spin-the-Wheel Reward ─────────────────────────────────────────────
-st.markdown("## 🎡 Spin the Wheel & Claim Your Early-Bird Reward")
-if "reward" not in st.session_state:
-    if st.button("Spin & Reveal", key="spin", help="Win a discount or bonus!"):
-        with st.spinner("Spinning the wheel..."):
-            time.sleep(2)
-        st.session_state.reward = random.choice([
-            "10% off tuition",
-            "Free 1-on-1 mentor session",
-            "Exclusive MDCAT Shortcut Guide",
-            "Priority access to live Q&A"
-        ])
-if "reward" in st.session_state:
-    st.success(f"🎉 Congratulations! You won: **{st.session_state.reward}**")
+# ── “Top G Challenge” Quiz ───────────────────────────────────────────────────────
+st.markdown("---\n<h2 style='text-align:center;color:#FFD700;'>🛡️ Top G Discipline Test</h2>", unsafe_allow_html=True)
+with st.form("challenge", clear_on_submit=True):
+    st.markdown("**Only serious grinders play.** Answer these to prove your mindset:")
+    q1 = st.radio("1) My typical study session is:", [
+        "A) 30 min then break", 
+        "B) 2 hrs no distractions", 
+        "C) I don’t study regularly",
+    ])
+    q2 = st.radio("2) When I fail a mock, I:", [
+        "A) Get angry & redo", 
+        "B) Blame external factors", 
+        "C) Move on quickly",
+    ])
+    q3 = st.radio("3) My late-night study strategy:", [
+        "A) Full focus till dawn", 
+        "B) Quick glance at notes", 
+        "C) I sleep early",
+    ])
+    sub = st.form_submit_button("🔒 Prove It")
+    if sub:
+        score = ({"A) 30 min then break":0,"B) 2 hrs no distractions":1,"C) I don’t study regularly":0}[q1] +
+                 {"A) Get angry & redo":1,"B) Blame external factors":0,"C) Move on quickly":0}[q2] +
+                 {"A) Full focus till dawn":1,"B) Quick glance at notes":0,"C) I sleep early":0}[q3])
+        if score >= 2:
+            st.success("💪 You passed the Top G mindset test. Welcome to the circle.")
+            st.session_state.topg = True
+        else:
+            st.error("❌ Not quite there. Build discipline & retry.")
 
-# ── 4. Core Feature Explorer ────────────────────────────────────────────────────
+# ── Core Features (Alpha Cards) ─────────────────────────────────────────────────
 features = [
-    {"title":"Adaptive Learning Paths","desc":"AI crafts your minute-by-minute study plan.","stat":("Avg. Score Gain","28%","+12%"),"lottie":"https://assets3.lottiefiles.com/packages/lf20_x9m3j9kv.json"},
-    {"title":"24/7 Mentor Chat","desc":"Top MDCAT mentors, any time you need.","stat":("Avg. Response Time","2m 15s","—"),"lottie":"https://assets2.lottiefiles.com/packages/lf20_mentor.json"},
-    {"title":"Gamified Progress","desc":"Earn badges, climb leaderboards.","stat":("Active Users","3.2K","+18%"),"lottie":"https://assets1.lottiefiles.com/packages/lf20_game.json"}
+    {"title":"Adaptive Paths","desc":"AI-powered plans that evolve as you level up."},
+    {"title":"24/7 Mentor Backing","desc":"Elite mentors at your beck & call."},
+    {"title":"Gamified Mastery","desc":"Badges, Leaderboards & Battle-tested community."},
 ]
-st.markdown("---\n## 🔍 Explore Our Core Features")
-choice = st.selectbox("", [f["title"] for f in features], index=0)
-feat = next(f for f in features if f["title"]==choice)
-c1,c2 = st.columns([1,2], gap="large")
-with c1:
-    components.html(f"""
-      <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-      <lottie-player src="{feat['lottie']}" background="transparent" speed="1"
-        style="width:100%;height:300px;" loop autoplay>
-      </lottie-player>
-    """, height=320)
-with c2:
-    st.subheader(feat["title"])
-    st.write(feat["desc"])
-    lbl,val,delta = feat["stat"]
-    st.metric(lbl, val, delta)
-    if val.endswith("%"): st.progress(int(val.strip("%")))
+st.markdown("---\n<h2 class='section-title' style='color:#FFD700;'>🏆 Core Arsenal</h2>", unsafe_allow_html=True)
+cols = st.columns(3, gap="large")
+for col, f in zip(cols, features):
+    with col:
+        st.markdown(f"<div class='card'><h3>{f['title']}</h3><p>{f['desc']}</p></div>", unsafe_allow_html=True)
 
-# ── 5. Impact Metrics & Countdown ───────────────────────────────────────────────
-seats_left = random.randint(2,10)
-st.markdown(f"<p style='text-align:center;color:#F45C48;'>🚨 Only **{seats_left}** seats left at this rate!</p>", unsafe_allow_html=True)
-m1,m2,m3 = st.columns(3)
-m1.metric("Avg. Score ↑","28%","+12%")
-m2.metric("Happy Mentees","4.8K","+25%")
-m3.metric("Mentor Satisfaction","4.9/5","+0.2")
+# ── Scarcity & Countdown ─────────────────────────────────────────────────────────
+seats = st.session_state.get("seats_left", random.randint(3,12))
+st.session_state.seats_left = seats
+st.markdown(f"<p style='text-align:center;color:#FF4500;'>🚨 {seats} Top G seats left!</p>", unsafe_allow_html=True)
+
 deadline = datetime(2025,5,15,18,0,0)
-d = deadline - datetime.now()
-st.markdown(f"<div class='countdown'>⏳ Next Live Q&A in <strong>{d.days}d {(d.seconds//3600)}h {((d.seconds%3600)//60)}m</strong></div>", unsafe_allow_html=True)
+diff = deadline - datetime.now()
+st.markdown(
+    f"<div class='countdown'>⏰ Next Elite Q&A in <strong>{diff.days}d {diff.seconds//3600}h {(diff.seconds%3600)//60}m</strong></div>",
+    unsafe_allow_html=True
+)
 
-# ── 6. Registration Form (with Spin Reward) ────────────────────────────────────
-st.markdown("---\n<h2 style='text-align:center;color:#2DD0BE;'>Ready to Level Up?</h2>", unsafe_allow_html=True)
-with st.form("register", clear_on_submit=True):
-    name  = st.text_input("Full Name")
-    email = st.text_input("Email Address")
-    if "reward" in st.session_state:
-        st.write(f"**Your Reward:** {st.session_state.reward}")
-    submit = st.form_submit_button("🚀 Claim My Spot")
-    if submit:
-        st.success(f"Thank you, {name}! 🎉 Check your email for details.")
-        st.balloons()
+# ── Final Alpha CTA ──────────────────────────────────────────────────────────────
+st.markdown("---\n<h2 style='text-align:center;color:#FFD700;'>Ready to Dominate?</h2>", unsafe_allow_html=True)
+with st.container():
+    if st.session_state.get("topg", False):
+        st.markdown("<p style='text-align:center;'>Your Top G reward: <strong>Free 1-on-1 Mentor Session</strong></p>", unsafe_allow_html=True)
+    colA, colB, colC = st.columns([1,2,1])
+    with colB:
+        if st.button("🚀 Join the Top G MDCAT Circle", key="join", help="Lock in your elite spot"):
+            st.success("🎉 You’re In! Check your email for VIP access.")
+            st.balloons()
 
-# ── 7. 24/7 Chat Widget ─────────────────────────────────────────────────────────
-components.html("""
-<script type="text/javascript">
-window.$crisp=[];window.CRISP_WEBSITE_ID="YOUR_CRISP_ID_HERE";
-(function(){ d=document; s=d.createElement("script");
-  s.src="https://client.crisp.chat/l.js"; s.async=1;
-  d.getElementsByTagName("head")[0].appendChild(s);
-})();
-</script>
-""", height=0)
-st.sidebar.markdown("## ❓ Need Help?  \n[💬 Chat on WhatsApp](https://wa.me/92300XXXXXXX)", unsafe_allow_html=True)
+# ── Sidebar Help & Metrics ───────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("## 📊 Live Impact")
+    st.metric("Avg. Score ↑","28%","+12%")
+    st.metric("Happy Mentees","4.8K","+25%")
+    st.markdown("---")
+    st.markdown("## ❓ Instant Support")
+    st.markdown("[💬 WhatsApp Chat](https://wa.me/92300XXXXXXX)", unsafe_allow_html=True)
