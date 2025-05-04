@@ -12,8 +12,7 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .reportview-container {background-color: #03162A;}
-    .css-1d391kg {background-color: #03162A;}
+    .reportview-container, .css-1d391kg {background-color: #03162A;}
     .stButton>button {background-color: #2DD0BE; color: #03162A; border-radius: 0.5rem;}
     .stButton>button:hover {background-color: #24a89e;}
     .stMetricValue, .stMetricDelta {color: #FFFFFF;}
@@ -32,22 +31,36 @@ with st.container():
         if st.button("Get Started"):
             st.balloons()
     with col2:
-        st.image("https://via.placeholder.com/400x300.png?text=Hero+Image", use_column_width=True)
+        st.image("https://via.placeholder.com/400x300.png?text=Hero+Image", use_container_width=True)
 
 st.markdown("---")
 
 # --- Features Section ---
 st.header("Features")
 features = [
-    ("Academic Support", ["Complete syllabus A–Z", "Intensive revision & crash-tests", "Concise written & video lessons", "7-day zero-stress roadmap"], "📚"),
-    ("Mentorship", ["24/7 doubt support", "One-on-one progress calls", "Daily accountability nudges"], "👥"),
-    ("Post-MDCAT Support", ["MBBS admission roadmap", "Celebrate success ceremonies", "Exclusive MBBS pro network"], "🏆")
+    ("📚 Academic Support", [
+        "Complete syllabus A–Z",
+        "Intensive revision & crash-tests",
+        "Concise written & video lessons",
+        "7-day zero-stress roadmap"
+    ]),
+    ("👥 Mentorship", [
+        "24/7 doubt support",
+        "One-on-one progress calls",
+        "Daily accountability nudges"
+    ]),
+    ("🏆 Post-MDCAT Support", [
+        "MBBS admission roadmap",
+        "Celebrate success ceremonies",
+        "Exclusive MBBS pro network"
+    ])
 ]
 cols = st.columns(3)
-for idx, (title, items, icon) in enumerate(features):
+for idx, (title, items) in enumerate(features):
     with cols[idx]:
-        st.subheader(f"{icon} {title}")
-        st.write("- " + "\n- ".join(items))
+        st.subheader(title)
+        for item in items:
+            st.write(f"- {item}")
         st.progress((idx+1)/len(features))
 
 st.markdown("---")
@@ -59,8 +72,12 @@ testimonials = [
     ("Accountability nudges changed my study routine.", "— Hamza R."),
     ("Secured my dream MBBS seat!", "— Ali S.")
 ]
-choice = st.selectbox("Choose a testimonial:", options=list(range(len(testimonials))), format_func=lambda i: testimonials[i][1])
-st.info(f"> {testimonials[choice][0]}\n\n{testimonials[choice][1]}")
+choice = st.selectbox(
+    "Choose a testimonial:",
+    options=list(range(len(testimonials))),
+    format_func=lambda i: testimonials[i][1]
+)
+st.info(f"{testimonials[choice][0]}\n\n{testimonials[choice][1]}")
 
 st.markdown("---")
 
