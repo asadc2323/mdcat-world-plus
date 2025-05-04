@@ -1,150 +1,151 @@
-# To run this prototype:
-# pip install streamlit
-
 import streamlit as st
-from datetime import datetime
 import streamlit.components.v1 as components
 
-# --- Page Configuration ---
-st.set_page_config(
-    page_title="Mentr: MDCAT World Plus",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+# --- Streamlit Page Config ---
+st.set_page_config(page_title="Mentr Landing Page", layout="wide")
 
-# --- Custom CSS & Fonts ---
-st.markdown(
-    """
-    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-    <style>
-      body, .css-18e3th9 { background-color: #03162A; color: #FFFFFF; font-family: 'Inter', sans-serif; margin:0; padding:0; }
-      /* Hero */
-      .hero { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 4rem 2rem; background: linear-gradient(135deg,#03162A,#002B3A,#2DD0BE); border-radius: 1rem; margin-bottom: 2rem; }
-      .hero-text { max-width: 600px; }
-      .hero-text h1 { font-size: 3rem; margin: 0; line-height: 1.2; }
-      .hero-text .highlight { color: #FFFFFF; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
-      .hero-text p { font-size: 1.25rem; margin: 1rem 0; }
-      /* Pillars */
-      .pillars-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 24px; margin-bottom: 2rem; }
-      .pillar-card { background: rgba(0,31,51,0.8); border-radius: 1rem; padding: 1.5rem; position: relative; overflow: hidden; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease-out forwards; }
-      .pillar-card:nth-child(1) { animation-delay: 0.1s; }
-      .pillar-card:nth-child(2) { animation-delay: 0.2s; }
-      .pillar-card:nth-child(3) { animation-delay: 0.3s; }
-      .pillar-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #2DD0BE; }
-      .pillar-icon { width: 48px; margin-bottom: 1rem; }
-      .pillar-card h3 { color: #2DD0BE; margin-bottom: 0.75rem; }
-      .pillar-card ul { list-style: none; padding: 0; margin: 0; }
-      .pillar-card ul li { margin-bottom: 0.75rem; line-height: 1.4; }
-      @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-      /* Testimonial Ticker */
-      .ticker { background: rgba(45,208,190,0.1); padding: 1rem; border-radius: 0.75rem; margin-bottom: 2rem; overflow: hidden; position: relative; }
-      .ticker-content { display: inline-block; white-space: nowrap; animation: scroll 20s linear infinite; }
-      .ticker-item { display: inline-block; padding-right: 4rem; font-size: 1rem; }
-      @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-      /* Countdown */
-      .countdown { text-align: center; font-size: 1.75rem; color: #2DD0BE; margin: 1rem 0; }
-      /* Buttons */
-      .btn-primary, .btn-secondary { display: inline-block; text-decoration: none; font-weight: 600; border-radius: 0.5rem; padding: 0.75rem 1.5rem; }
-      .btn-primary { background: #2DD0BE; color: #03162A; margin-right: 1rem; }
-      .btn-secondary { border: 2px solid #2DD0BE; color: #2DD0BE; }
-      /* Sticky Join */
-      @media (min-width:768px) { .join-btn { position: fixed; bottom:2rem; right:2rem; z-index:100; } }
-      /* Mobile adjustments */
-      @media (max-width:600px) {
-        .hero { flex-direction: column-reverse; padding:2rem; }
-        .hero-text h1 { font-size:2.25rem; }
-        .pillar-card { min-width:80%; flex:0 0 auto; }
-        .pillars-container { display:flex; overflow-x:auto; }
-      }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# --- Hero Section with Lottie Embed ---
-st.markdown("<script src='https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js'></script>", unsafe_allow_html=True)
-st.markdown("<div class='hero'>", unsafe_allow_html=True)
-col1, col2 = st.columns([6,4], gap="large")
-with col1:
-    st.markdown("<div class='hero-text'>", unsafe_allow_html=True)
-    st.markdown(
-        """
-        <h1>Welcome to the <span class='highlight'>MDCAT World (Plus)</span></h1>
-        <p>Your all-in-one path—from Freshers Session right <br/>up to MDCAT success.</p>
-        """,
-        unsafe_allow_html=True
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-with col2:
-    # Embed Lottie animation
-    components.html(
-        """
-        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_tfb3estd.json"  background="transparent"  speed="1"  style="width:100%; height:250px;"  loop  autoplay></lottie-player>
-        """,
-        height=300,
-    )
-st.markdown("</div>", unsafe_allow_html=True)
-
-# --- Core Pillars ---
-st.markdown("<div class='pillars-container'>", unsafe_allow_html=True)
-pillars = [
-    {"icon":"https://img.icons8.com/ios-filled/80/2DD0BE/book.png","title":"Academic Support","items":["Complete syllabus A–Z","Intensive revision & crash-tests","Concise written & video lessons","7-day zero-stress roadmap"]},
-    {"icon":"https://img.icons8.com/ios-glyphs/80/2DD0BE/user-group-man-woman.png","title":"Mentorship","items":["24/7 doubt support","One-on-one progress calls","Daily accountability nudges"]},
-    {"icon":"https://img.icons8.com/ios-filled/80/2DD0BE/medal.png","title":"Post-MDCAT Support","items":["MBBS admission roadmap","Celebrate success ceremonies","Exclusive MBBS pro network"]}
-]
-for p in pillars:
-    st.markdown(f"""
-    <div class='pillar-card'>
-      <img src='{p['icon']}' class='pillar-icon'>
-      <h3>{p['title']}</h3>
-      <ul>
-        {''.join([f"<li>{i}</li>" for i in p['items']])}
-      </ul>
+# --- Embed Fully Responsive Landing Page via Bootstrap + AOS ---
+landing_page_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mentr: MDCAT World Plus</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Custom Styles -->
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #03162A; color: #fff; }
+    .hero { background: linear-gradient(135deg,#03162A,#002B3A,#2DD0BE); padding: 100px 0; }
+    .hero h1 { font-size: 3rem; font-weight: 700; }
+    .hero p { font-size: 1.25rem; margin-bottom: 30px; }
+    .btn-primary { background: #2DD0BE; border: none; }
+    .features .card { background: rgba(0,31,51,0.8); border: none; }
+    .features .card h5 { color: #2DD0BE; }
+    .testimonial-carousel .carousel-item { text-align: center; }
+    .countdown { font-size: 2rem; color: #2DD0BE; margin: 30px 0; }
+    footer { padding: 50px 0; text-align: center; }
+  </style>
+</head>
+<body data-bs-theme="dark">
+  <!-- Hero Section -->
+  <section class="hero text-center text-white">
+    <div class="container" data-aos="fade-down">
+      <h1>Welcome to <span class="text-white" style="text-shadow:0 0 8px rgba(255,255,255,0.5);">MDCAT World (Plus)</span></h1>
+      <p>Your all-in-one path—from Freshers Session right up to MDCAT success</p>
+      <a href="#register" class="btn btn-lg btn-primary me-3" data-aos="zoom-in" data-aos-delay="200">Join Now</a>
+      <a href="#reviews" class="btn btn-outline-light btn-lg" data-aos="zoom-in" data-aos-delay="400">Read Reviews</a>
     </div>
-    """, unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
+  </section>
 
-# --- Testimonials Ticker ---
-st.markdown(
-    """
-    <div class='ticker'>
-      <div class='ticker-content'>
-        <div class='ticker-item'>⭐⭐⭐⭐⭐ “Jumped 60% → 85% in 8 weeks!” — Ayesha Z.</div>
-        <div class='ticker-item'>⭐⭐⭐⭐⭐ “Accountability nudges changed my routine.” — Hamza R.</div>
-        <div class='ticker-item'>⭐⭐⭐⭐⭐ “Secured my dream MBBS seat!” — Ali S.</div>
+  <!-- Features -->
+  <section class="features py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="card p-4 h-100">
+            <img src="https://img.icons8.com/ios-filled/64/2DD0BE/book.png" class="mb-3" alt="Academic Support">
+            <h5>Academic Support</h5>
+            <ul>
+              <li>Complete syllabus A–Z</li>
+              <li>Intensive revision & crash-tests</li>
+              <li>Concise written & video lessons</li>
+              <li>7-day zero-stress roadmap</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="card p-4 h-100">
+            <img src="https://img.icons8.com/ios-glyphs/64/2DD0BE/user-group-man-woman.png" class="mb-3" alt="Mentorship">
+            <h5>Mentorship</h5>
+            <ul>
+              <li>24/7 doubt support</li>
+              <li>One-on-one progress calls</li>
+              <li>Daily accountability nudges</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+          <div class="card p-4 h-100">
+            <img src="https://img.icons8.com/ios-filled/64/2DD0BE/medal.png" class="mb-3" alt="Post-MDCAT Support">
+            <h5>Post-MDCAT Support</h5>
+            <ul>
+              <li>MBBS admission roadmap</li>
+              <li>Celebrate success ceremonies</li>
+              <li>Exclusive MBBS pro network</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    """,
-    unsafe_allow_html=True
-)
+  </section>
 
-# --- Live Countdown ---
-target = datetime(2025,6,1,20,0)
-now = datetime.now()
-delta = target - now
-
-days = delta.days
-hours, rem = divmod(delta.seconds,3600)
-minutes, _ = divmod(rem,60)
-
-st.markdown(
-    f"""
-    <div class='countdown'>
-      Next Live Q&A in: {days:02d}d : {hours:02d}h : {minutes:02d}m
+  <!-- Testimonial Carousel -->
+  <section class="testimonial-carousel py-5 bg-dark">
+    <div class="container">
+      <div id="carouselTestimonials" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <p class="h5">“Jumped from 60% → 85% in 8 weeks!”</p>
+            <small>— Ayesha Z.</small>
+          </div>
+          <div class="carousel-item">
+            <p class="h5">“Accountability nudges changed my study routine.”</p>
+            <small>— Hamza R.</small>
+          </div>
+          <div class="carousel-item">
+            <p class="h5">“Secured my dream MBBS seat!”</p>
+            <small>— Ali S.</small>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTestimonials" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselTestimonials" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
     </div>
-    """,
-    unsafe_allow_html=True
-)
+  </section>
 
-# --- CTAs ---
-st.markdown("<div style='text-align:center; margin-bottom:4rem;'>", unsafe_allow_html=True)
-st.markdown("<a href='#join' class='btn-primary'>Join Mentr World →</a><a href='#reviews' class='btn-secondary'>Read Reviews →</a>", unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
+  <!-- Countdown -->
+  <section class="text-center" data-aos="zoom-in" data-aos-delay="200">
+    <div class="countdown" id="countdown">Loading countdown...</div>
+  </section>
 
-# --- Sticky Join Button ---
-st.markdown(
-    """
-    <a href='#join' class='join-btn'>Join Mentr World</a>
-    """,
-    unsafe_allow_html=True
-)
+  <!-- Register CTA -->
+  <section id="register" class="text-center py-5">
+    <a href="#" class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="300">Register Now</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Mentr. All rights reserved.
+  </footer>
+
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+    // Countdown Timer
+    const end = new Date('2025-06-01T20:00:00').getTime();
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = end - now;
+      if (diff <= 0) { clearInterval(timer); document.getElementById('countdown').innerHTML = 'Live now!'; return; }
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff/(1000*60*60)) % 24);
+      const m = Math.floor((diff/(1000*60)) % 60);
+      document.getElementById('countdown').innerHTML = `Next Live Q&A in: ${d}d : ${h}h : ${m}m`;
+    }, 1000);
+  </script>
+</body>
+</html>
+"""
+
+# Render the landing page
+components.html(landing_page_html, height=1600, scrolling=True)
