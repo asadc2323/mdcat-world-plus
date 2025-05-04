@@ -1,244 +1,150 @@
 import streamlit as st
-import datetime
+from datetime import datetime
 
-# Page configuration
+# --- Page Configuration ---
 st.set_page_config(
-    page_title="The MDCAT World Plus", layout="wide", initial_sidebar_state="collapsed"
+    page_title="Mentr: MDCAT World Plus",
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
-# Inject custom CSS
+# --- Custom CSS & Fonts ---
 st.markdown(
     """
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <style>
-    /* Global background and font */
-    .css-18e3th9 {background-color: #03162A; color: #FFFFFF;} /* Streamlit app main container */
-
-    /* Header styles */
-    .header {
-        padding: 4rem 1rem;
-        background: linear-gradient(135deg, #03162A, #002B3A, #2DD0BE);
-        text-align: center;
-        border-radius: 1rem;
-        margin-bottom: 2rem;
-    }
-    .header h2 {
-        font-size: 3rem;
-        margin: 0;
-    }
-    .highlight {
-        color: #2DD0BE;
-    }
-    .subhead {
-        font-size: 1.25rem;
-        margin-top: 0.5rem;
-    }
-
-    /* Pillar card grid */
-    .pillars-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    .pillar-card {
-        background: rgba(0, 31, 51, 0.6);
-        border-radius: 1rem;
-        padding: 1.5rem;
-        position: relative;
-        overflow: hidden;
-        min-height: 240px;
-    }
-    .pillar-card::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background: #2DD0BE;
-        border-radius: 0 5px 5px 0;
-    }
-    .pillar-icon {
-        width: 40px;
-        margin-bottom: 1rem;
-    }
-    .pillar-card h3 {
-        color: #2DD0BE;
-        margin-bottom: 1rem;
-    }
-    .pillar-card ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .pillar-card ul li {
-        margin-bottom: 0.75rem;
-    }
-
-    /* Testimonial ticker */
-    .testimonial-ticker {
-        background: rgba(45, 208, 190, 0.1);
-        padding: 1rem;
-        border-radius: 0.75rem;
-        overflow: hidden;
-        white-space: nowrap;
-        margin-bottom: 2rem;
-    }
-    .testimonial-ticker marquee {
-        font-size: 1rem;
-        color: #FFFFFF;
-    }
-
-    /* Wait CTA */
-    .wait-cta {
-        text-align: center;
-        background: rgba(0, 31, 51, 0.5);
-        padding: 2rem 1rem;
-        border-radius: 1rem;
-        margin-bottom: 2rem;
-    }
-    .wait-cta h3 {
-        margin: 0;
-        font-size: 2rem;
-        color: #FFFFFF;
-    }
-    .countdown {
-        font-size: 1.75rem;
-        color: #2DD0BE;
-        margin: 0.5rem 0 1rem;
-    }
-    .btn-secondary {
-        display: inline-block;
-        color: #2DD0BE;
-        text-decoration: none;
-        border: 2px solid #2DD0BE;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-    }
+      body, .css-18e3th9 { background-color: #03162A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+      /* Header */
+      .header { text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg,#03162A,#002B3A,#2DD0BE); border-radius: 1rem; margin-bottom: 2rem; }
+      .header h1 { font-size: 3rem; margin: 0; }
+      .header .highlight { color: #2DD0BE; }
+      .header p { font-size: 1.25rem; margin-top: 0.5rem; }
+      /* Pillar Cards */
+      .pillar h3 { color: #2DD0BE; margin-bottom: 0.5rem; }
+      /* Testimonial Ticker */
+      .ticker { display: flex; overflow: hidden; white-space: nowrap; margin-bottom: 2rem; }
+      .ticker-item { padding-right: 4rem; font-size: 1rem; }
+      @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+      .ticker { animation: scroll 20s linear infinite; }
+      /* Countdown */
+      .countdown { text-align: center; font-size: 1.75rem; color: #2DD0BE; margin: 1rem 0; }
+      /* Buttons */
+      .btn-primary { background: #2DD0BE; color: #03162A; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
+      .btn-secondary { border: 2px solid #2DD0BE; color: #2DD0BE; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
+      /* Sticky Join */
+      @media (min-width: 768px) {
+        .join-btn { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; }
+      }
     </style>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# Header Section
+# --- Hero Header ---
 st.markdown(
     """
     <div class="header">
-        <h2>The <span class="highlight">MDCAT World<br>(Plus)</span></h2>
-        <p class="subhead">Freshers Session — Till MDCAT</p>
+      <h1>The <span class="highlight">MDCAT World (Plus)</span></h1>
+      <p>Freshers Session — Till MDCAT</p>
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# Pillars Grid
-st.markdown('<div class="pillars-grid">', unsafe_allow_html=True)
+# --- Three Core Pillars ---
+col1, col2, col3 = st.columns(3, gap="large")
 
-# Academic Support Card
+with col1:
+    st.markdown("<div class='pillar'>", unsafe_allow_html=True)
+    st.image("https://img.icons8.com/ios-filled/50/2DD0BE/book.png", width=40)
+    st.markdown("### Academic Support")
+    st.write(
+        "- Complete syllabus from A–Z  
+         - Intensive revision & crash-test sessions  
+         - Concise written & video discussions  
+         - 7-day “zero-stress” final plan"
+    )
+    with st.expander("More details"):
+        st.write("Our subject-matter experts guide you step-by-step, ensuring mastery and confidence before the big day.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with col2:
+    st.markdown("<div class='pillar'>", unsafe_allow_html=True)
+    st.image("https://img.icons8.com/ios-glyphs/50/2DD0BE/user-group-man-woman.png", width=40)
+    st.markdown("### Mentorship")
+    st.write(
+        "- 24/7 doubt-solving until exam day  
+         - One-on-one progress check-ins  
+         - Daily accountability reminders"
+    )
+    with st.expander("More details"):
+        st.write("Personalized mentorship plans and data-driven feedback keep you on track every day.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with col3:
+    st.markdown("<div class='pillar'>", unsafe_allow_html=True)
+    st.image("https://img.icons8.com/ios-filled/50/2DD0BE/medal.png", width=40)
+    st.markdown("### Post-MDCAT Support")
+    st.write(
+        "- MBBS admission roadmap & guidance  
+         - Celebrate success at our prize ceremony  
+         - Exclusive access to MBBS professional network"
+    )
+    with st.expander("More details"):
+        st.write("Stay connected with mentors and peers as you transition into medical school and beyond.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# --- Testimonial Ticker ---
 st.markdown(
     """
-    <div class="pillar-card">
-        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Academic Support">
-        <h3>Academic Support</h3>
-        <ul>
-            <li>Complete syllabus completion</li>
-            <li>Revision & crash-test sessions</li>
-            <li>Written explanations & video discussions</li>
-            <li>Last-week, “zero-stress” plan</li>
-        </ul>
+    <div class="ticker">
+      <div class="ticker-item">⭐⭐⭐⭐⭐ “Jumped from 60% to 85% in 8 weeks!” — Ayesha Z.</div>
+      <div class="ticker-item">⭐⭐⭐⭐⭐ “Accountability check-ins saved my study routine.” — Hamza R.</div>
+      <div class="ticker-item">⭐⭐⭐⭐⭐ “Landed my dream MBBS seat!” — Ali S.</div>
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# Mentorship Card
-st.markdown(
-    """
-    <div class="pillar-card">
-        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Mentorship">
-        <h3>Mentorship</h3>
-        <ul>
-            <li>24/7 doubt-solving till MDCAT</li>
-            <li>One-on-one progress calls</li>
-            <li>Daily accountability check-ins</li>
-        </ul>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Post-MDCAT Support Card
-st.markdown(
-    """
-    <div class="pillar-card">
-        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Post-MDCAT Support">
-        <h3>Post-MDCAT Support</h3>
-        <ul>
-            <li>MBBS admission roadmap</li>
-            <li>Prize distribution ceremony</li>
-            <li>“Mentor Club” with MBBS pros</li>
-        </ul>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Testimonial Ticker
-st.markdown(
-    """
-    <div class="testimonial-ticker">
-        <marquee behavior="scroll" direction="left">
-            ⭐⭐⭐⭐⭐ “I went from 60% to 85% in just 8 weeks!” — Ayesha Z.
-            &nbsp;&nbsp;
-            ⭐⭐⭐⭐⭐ “Mentr’s accountability check-ins kept me on track.” — Hamza R.
-            &nbsp;&nbsp;
-            ⭐⭐⭐⭐⭐ “I got into my dream MBBS college!” — Ali S.
-        </marquee>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Countdown CTA
-# Set your target Q&A datetime here
-target = datetime.datetime(2025, 6, 1, 20, 0)
-now = datetime.datetime.now()
+# --- Live Countdown to Q&A ---
+target = datetime(2025, 6, 1, 20, 0)
+now = datetime.now()
 delta = target - now
 
 days = delta.days
-hours, remainder = divmod(delta.seconds, 3600)
-minutes, seconds = divmod(remainder, 60)
+hours, rem = divmod(delta.seconds, 3600)
+minutes, _ = divmod(rem, 60)
 
 st.markdown(
     f"""
-    <div class="wait-cta">
-        <h3>Wait! Don’t miss our next live Q&A</h3>
-        <div class="countdown">{days:02d}d : {hours:02d}h : {minutes:02d}m</div>
-        <a href="#reviews" class="btn-secondary">Read reviews before joining</a>
+    <div class="countdown">
+      Next Live Q&A in: {days:02d}d : {hours:02d}h : {minutes:02d}m
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# Sticky Join Button (Desktop)
-sticky = """
-<style>
-@media (min-width: 768px) {
-  .join-btn {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: #2DD0BE;
-    color: #03162A;
-    padding: 1rem 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: bold;
-    text-decoration: none;
-  }
-}
-</style>
-<a href="#join" class="join-btn">Join Mentr World →</a>
-"""
-st.markdown(sticky, unsafe_allow_html=True)
+# --- Primary CTAs ---
+cta_col, rev_col = st.columns([2,1])
+
+with cta_col:
+    st.markdown(
+        "<a href='#join' class='btn-primary'>Join Mentr World →</a>",
+        unsafe_allow_html=True
+    )
+with rev_col:
+    st.markdown(
+        "<a href='#reviews' class='btn-secondary'>Read Reviews →</a>",
+        unsafe_allow_html=True
+    )
+
+# --- Sticky Join Button ---
+st.markdown(
+    """
+    <style>
+      .join-btn { background: #2DD0BE; color: #03162A; padding: 0.75rem 1.25rem; border-radius: 0.5rem; font-weight: 600; text-decoration: none; }
+    </style>
+    <a href='#join' class='join-btn'>Join Mentr World</a>
+    """,
+    unsafe_allow_html=True
+)
