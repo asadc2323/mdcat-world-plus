@@ -1,205 +1,244 @@
 import streamlit as st
+import datetime
 
-# --- Streamlit Page Configuration ---
+# Page configuration
 st.set_page_config(
-    page_title="The MDCAT World (Plus)",
-    page_icon="🎓",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    page_title="The MDCAT World Plus", layout="wide", initial_sidebar_state="collapsed"
 )
 
-# --- Centralized CSS (loaded once) ---
-css = """
-:root {
-  --primary-start: #2DD0BE;
-  --primary-end: #12736A;
-  --accent: #8CFFE0;
-  --dark-start: #03162A;
-  --dark-end: #072A35;
-}
-
-/* Global Styles */
-html, body, [data-testid='stAppViewContainer'] {
-  background: linear-gradient(to bottom, var(--dark-start), var(--dark-end));
-  color: #e0e0e0;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Hero Section */
-.hero {
-  position: relative;
-  height: 100vh;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-.hero video.video-bg {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%; min-height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  backdrop-filter: brightness(0.6) blur(4px);
-  z-index: -1;
-}
-.hero-content {
-  text-align: center;
-  color: white;
-  max-width: 800px;
-}
-.hero-content h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(2rem, 6vw, 4rem);
-  background: linear-gradient(90deg, var(--primary-start), var(--primary-end), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-}
-.hero-content .cta {
-  padding: 1rem 2rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #000;
-  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  transition: transform 0.3s ease;
-}
-.hero-content .cta:hover {
-  transform: scale(1.05);
-}
-
-/* Support Cards */
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  margin: 4rem 0;
-}
-.card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2rem;
-  flex: 1;
-  min-width: 280px;
-  max-width: 350px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-.card:hover {
-  transform: translateY(-8px) rotateX(3deg);
-  box-shadow: 0 12px 48px rgba(0,0,0,0.6);
-}
-.card h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--primary-start);
-  margin-bottom: 1rem;
-}
-.card ul {
-  list-style: none;
-  padding: 0;
-}
-.card li {
-  margin-bottom: 0.75rem;
-  padding-left: 1.5rem;
-  position: relative;
-}
-.card li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: var(--primary-start);
-}
-
-/* CTA Banner */
-.cta-banner {
-  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
-  padding: 3rem;
-  border-radius: 1rem;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  transition: background 0.3s ease;
-}
-.cta-banner:hover {
-  background: linear-gradient(90deg, var(--primary-end), var(--primary-start));
-}
-.cta-banner h3 { font-size: 2rem; margin-bottom: 0.5rem; }
-.cta-banner p { font-size: 1.125rem; margin: 0; }
-
-@media(max-width:768px) {
-  .cards { flex-direction: column; align-items: center; }
-}
-"""
-
-# Apply CSS
-st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-
-# --- Hero Section ---
+# Inject custom CSS
 st.markdown(
     """
-    <header class='hero'>
-      <video class='video-bg' autoplay loop muted playsinline>
-        <source src='assets/video-hero.mp4' type='video/mp4'/>
-      </video>
-      <div class='hero-content'>
-        <h1>Rebuilding Education,<br/>One Student at a Time</h1>
-        <button class='cta'>Apply Now &rarr;</button>
-      </div>
-    </header>
+    <style>
+    /* Global background and font */
+    .css-18e3th9 {background-color: #03162A; color: #FFFFFF;} /* Streamlit app main container */
+
+    /* Header styles */
+    .header {
+        padding: 4rem 1rem;
+        background: linear-gradient(135deg, #03162A, #002B3A, #2DD0BE);
+        text-align: center;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+    }
+    .header h2 {
+        font-size: 3rem;
+        margin: 0;
+    }
+    .highlight {
+        color: #2DD0BE;
+    }
+    .subhead {
+        font-size: 1.25rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Pillar card grid */
+    .pillars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .pillar-card {
+        background: rgba(0, 31, 51, 0.6);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        min-height: 240px;
+    }
+    .pillar-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #2DD0BE;
+        border-radius: 0 5px 5px 0;
+    }
+    .pillar-icon {
+        width: 40px;
+        margin-bottom: 1rem;
+    }
+    .pillar-card h3 {
+        color: #2DD0BE;
+        margin-bottom: 1rem;
+    }
+    .pillar-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .pillar-card ul li {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Testimonial ticker */
+    .testimonial-ticker {
+        background: rgba(45, 208, 190, 0.1);
+        padding: 1rem;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: 2rem;
+    }
+    .testimonial-ticker marquee {
+        font-size: 1rem;
+        color: #FFFFFF;
+    }
+
+    /* Wait CTA */
+    .wait-cta {
+        text-align: center;
+        background: rgba(0, 31, 51, 0.5);
+        padding: 2rem 1rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+    }
+    .wait-cta h3 {
+        margin: 0;
+        font-size: 2rem;
+        color: #FFFFFF;
+    }
+    .countdown {
+        font-size: 1.75rem;
+        color: #2DD0BE;
+        margin: 0.5rem 0 1rem;
+    }
+    .btn-secondary {
+        display: inline-block;
+        color: #2DD0BE;
+        text-decoration: none;
+        border: 2px solid #2DD0BE;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+    }
+    </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
-# --- Support Cards Section ---
-card_data = [
-    ("Academic Support", [
-        "Complete syllabus completion",
-        "Revision and Crash Test Session",
-        "Written explanation & Video Discussions",
-        "Last Week Plan before MDCAT"
-    ]),
-    ("Mentorship", [
-        "Complete Doubt Solving Support till MDCAT",
-        "One-on-one Mentorship till MDCAT",
-        "Daily Accountability till MDCAT"
-    ]),
-    ("Post-MDCAT Support", [
-        "Post-MDCAT admission support for MBBS Colleges",
-        "Prize Distribution Ceremony after MBBS Admissions",
-        "Mentr Ecosystem with MBBS professionals"
-    ])
-]
-
-cols = st.columns(1 if st.session_state.get('mobile', False) else 3, gap='large')
-
-for col, (title, items) in zip(cols, card_data):
-    with col:
-        list_items = ''.join(f"<li>{i}</li>" for i in items)
-        st.markdown(
-            f"<div class='card'><h3>{title}</h3><ul>{list_items}</ul></div>",
-            unsafe_allow_html=True
-        )
-
-# --- Final CTA Banner ---
+# Header Section
 st.markdown(
     """
-    <div class='cta-banner'>
-      <h3>WAIT!</h3>
-      <p>Read reviews before joining</p>
+    <div class="header">
+        <h2>The <span class="highlight">MDCAT World<br>(Plus)</span></h2>
+        <p class="subhead">Freshers Session — Till MDCAT</p>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+
+# Pillars Grid
+st.markdown('<div class="pillars-grid">', unsafe_allow_html=True)
+
+# Academic Support Card
+st.markdown(
+    """
+    <div class="pillar-card">
+        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Academic Support">
+        <h3>Academic Support</h3>
+        <ul>
+            <li>Complete syllabus completion</li>
+            <li>Revision & crash-test sessions</li>
+            <li>Written explanations & video discussions</li>
+            <li>Last-week, “zero-stress” plan</li>
+        </ul>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Mentorship Card
+st.markdown(
+    """
+    <div class="pillar-card">
+        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Mentorship">
+        <h3>Mentorship</h3>
+        <ul>
+            <li>24/7 doubt-solving till MDCAT</li>
+            <li>One-on-one progress calls</li>
+            <li>Daily accountability check-ins</li>
+        </ul>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Post-MDCAT Support Card
+st.markdown(
+    """
+    <div class="pillar-card">
+        <img src="https://via.placeholder.com/40" class="pillar-icon" alt="Post-MDCAT Support">
+        <h3>Post-MDCAT Support</h3>
+        <ul>
+            <li>MBBS admission roadmap</li>
+            <li>Prize distribution ceremony</li>
+            <li>“Mentor Club” with MBBS pros</li>
+        </ul>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Testimonial Ticker
+st.markdown(
+    """
+    <div class="testimonial-ticker">
+        <marquee behavior="scroll" direction="left">
+            ⭐⭐⭐⭐⭐ “I went from 60% to 85% in just 8 weeks!” — Ayesha Z.
+            &nbsp;&nbsp;
+            ⭐⭐⭐⭐⭐ “Mentr’s accountability check-ins kept me on track.” — Hamza R.
+            &nbsp;&nbsp;
+            ⭐⭐⭐⭐⭐ “I got into my dream MBBS college!” — Ali S.
+        </marquee>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Countdown CTA
+# Set your target Q&A datetime here
+target = datetime.datetime(2025, 6, 1, 20, 0)
+now = datetime.datetime.now()
+delta = target - now
+
+days = delta.days
+hours, remainder = divmod(delta.seconds, 3600)
+minutes, seconds = divmod(remainder, 60)
+
+st.markdown(
+    f"""
+    <div class="wait-cta">
+        <h3>Wait! Don’t miss our next live Q&A</h3>
+        <div class="countdown">{days:02d}d : {hours:02d}h : {minutes:02d}m</div>
+        <a href="#reviews" class="btn-secondary">Read reviews before joining</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Sticky Join Button (Desktop)
+sticky = """
+<style>
+@media (min-width: 768px) {
+  .join-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #2DD0BE;
+    color: #03162A;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+</style>
+<a href="#join" class="join-btn">Join Mentr World →</a>
+"""
+st.markdown(sticky, unsafe_allow_html=True)
