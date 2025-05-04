@@ -2,12 +2,69 @@ import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
 
-st.set_page_config(page_title="Mentr • Features", layout="wide")
+# ── Page config ───────────────────────────────────────────────────────────────
+st.set_page_config(
+    page_title="Mentr • Feature Explorer",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# Hero (unchanged)...
-# ...
+# ── Custom CSS ────────────────────────────────────────────────────────────────
+st.markdown("""
+<style>
+/* Brand fonts and colors */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+html, body, [class*="css"]  {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background-color: #03162A;
+}
+/* Hero styling */
+.hero {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+.hero h1 { font-size: 3rem; margin-bottom: 0.3rem; color: #2DD0BE; }
+.hero p  { font-size: 1.2rem; color: #B0C4DE; }
+/* Feature selector */
+.stSelectbox > div>div { background: rgba(45,208,190,0.1); border-radius: 0.5rem; }
+/* Metrics & progress */
+.stMetric { margin-top: 0.5rem; }
+.stProgress > div > div { background: #2DD0BE !important; }
+/* Demo expander */
+.stExpanderHeader { background-color: rgba(45,208,190,0.1); border-radius: 0.5rem; }
+/* CTA */
+.cta-button button {
+    background-color: #2DD0BE;
+    color: #03162A;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+}
+.cta-button button:hover {
+    opacity: 0.9;
+}
+/* Countdown */
+.countdown { text-align:center; margin:2rem 0; font-size:1.5rem; color:#2DD0BE; }
+/* Sidebar */
+.stSidebar { background-color: #021022; }
+</style>
+""", unsafe_allow_html=True)
 
-# 1. Define your features (same as before)
+# ── Hero ───────────────────────────────────────────────────────────────────────
+with st.container():
+    st.markdown(
+        """
+        <div class="hero">
+          <h1>Why Students 💚 Mentr</h1>
+          <p>An immersive, personalized, mentor-backed learning ecosystem</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ── Feature Definitions ────────────────────────────────────────────────────────
 features = [
     {
         "title": "Adaptive Learning Paths",
@@ -32,65 +89,72 @@ features = [
     },
 ]
 
-# 2. Tabs for each feature, with client-side Lottie loading
-tabs = st.tabs([f["title"] for f in features])
-for tab, feat in zip(tabs, features):
-    with tab:
-        c1, c2 = st.columns([1, 2])
-        # Left: embed the Lottie player
-        with c1:
-            components.html(
-                f"""
-                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                <lottie-player
-                  src="{feat['lottie_url']}"
-                  background="transparent"
-                  speed="1"
-                  style="width:100%; height:300px;"
-                  loop
-                  autoplay
-                ></lottie-player>
-                """,
-                height=320,  # give enough height for the player
-            )
-        # Right: content
-        with c2:
-            st.header(feat["title"])
-            st.write(feat["desc"])
-            label, val, delta = feat["stat"]
-            st.metric(label, val, delta)
-            with st.expander("▶️ Watch a 30s demo"):
-                st.video(feat["demo_url"])
-        st.divider()
+# ── Feature Explorer ───────────────────────────────────────────────────────────
+st.markdown("## 🔍 Explore Our Core Features")
+feature_titles = [f["title"] for f in features]
+choice = st.selectbox("Pick a feature:", feature_titles, index=0)
 
-# 3. The rest of your app (metrics, countdown, form, etc.)…
-# live countdown
+# pull selected
+feat = next(f for f in features if f["title"] == choice)
+
+col1, col2 = st.columns([1, 2], gap="large")
+with col1:
+    components.html(
+        f"""
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <lottie-player
+            src="{feat['lottie_url']}"
+            background="transparent"
+            speed="1"
+            style="width:100%; height:300px;"
+            loop
+            autoplay
+        ></lottie-player>
+        """,
+        height=320,
+    )
+with col2:
+    st.subheader(feat["title"])
+    st.write(feat["desc"])
+    label, val, delta = feat["stat"]
+    st.metric(label, val, delta)
+    # Animate a progress bar if it's a percentage
+    if val.endswith("%"):
+        percent = int(val.strip("%"))
+        st.progress(percent)
+    with st.expander("▶️ Watch a 30s demo"):
+        st.video(feat["demo_url"])
+
+# ── Impact Metrics ─────────────────────────────────────────────────────────────
+st.markdown("---")
+st.markdown("## 🚀 Real Impact So Far")
+m1, m2, m3 = st.columns(3)
+m1.metric("Avg. Score Improvement", "28%", "+12%")
+m2.metric("Happy Mentees", "4.8K", "+25%")
+m3.metric("Mentor Satisfaction", "4.9 / 5", "+0.2")
+
+# ── Live Countdown ────────────────────────────────────────────────────────────
 deadline = datetime(2025, 5, 15, 18, 0, 0)
 now = datetime.now()
 diff = deadline - now
-days, hrs, mins = diff.days, diff.seconds//3600, (diff.seconds%3600)//60
+days, hrs, mins = diff.days, diff.seconds // 3600, (diff.seconds % 3600) // 60
 st.markdown(
-    f"<h2 style='text-align:center;'>Next Live Q&A in {days}d {hrs}h {mins}m</h2>",
-    unsafe_allow_html=True
+    f"<div class='countdown'>Next Live Q&A in <strong>{days}d {hrs}h {mins}m</strong></div>",
+    unsafe_allow_html=True,
 )
 
-# registration form
+# ── Registration CTA ──────────────────────────────────────────────────────────
 st.markdown("---")
-with st.form("register"):
-    st.subheader("Join Mentr Today")
-    name = st.text_input("Full Name")
-    email = st.text_input("Email Address")
-    code = st.text_input("Referral Code (optional)")
-    submitted = st.form_submit_button("🚀 Get Early Access")
-    if submitted:
-        st.success("Thanks! 🚀 We've sent you a link.")
+st.markdown("<h2 style='text-align:center;'>Ready to transform your learning?</h2>", unsafe_allow_html=True)
+colA, colB, colC = st.columns([1, 1, 1])
+with colB:
+    if st.button("🚀 Get Early Access", key="early_access", help="Join the waitlist now"):
+        st.success("Awesome—you’re on the list! Check your email for next steps.")
         st.balloons()
 
-# sidebar chat link
+# ── Sidebar: Instant Chat ─────────────────────────────────────────────────────
+st.sidebar.markdown("## ❓ Need help?")
 st.sidebar.markdown(
-    """
-    **❓ Need help?**  
-    [Chat on WhatsApp](https://wa.me/92300XXXXXXX)  
-    We're here 24/7!
-    """
+    "[💬 Chat on WhatsApp](https://wa.me/92300XXXXXXX)  \n"
+    "Our mentors are online 24/7!"
 )
