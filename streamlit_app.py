@@ -60,8 +60,7 @@ testimonials = [
     ("Secured my dream MBBS seat!", "— Ali S.")
 ]
 choice = st.selectbox("Choose a testimonial:", options=list(range(len(testimonials))), format_func=lambda i: testimonials[i][1])
-st.info(f"> {testimonials[choice][0]}\n
-{testimonials[choice][1]}")
+st.info(f"> {testimonials[choice][0]}\n\n{testimonials[choice][1]}")
 
 st.markdown("---")
 
